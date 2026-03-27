@@ -19,28 +19,28 @@ pipeline {
             steps {
                 script {
                     docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
-                        sh 'mvn -Dmaven.repo.local=/tmp/m2repo clean package -DskipTests'
+                        sh 'MAVEN_OPTS="-Xmx512m" mvn -Dmaven.repo.local=/tmp/m2repo clean package -DskipTests'
                     }
                 }
             }
         }
 
-        stage('Test with Java 11') {
+        stage('Test with Java 17') {
             steps {
                 script {
-                    docker.image('maven:3.9.6-eclipse-temurin-11').inside('--network host') {
-                        sh 'mvn -Dmaven.repo.local=/tmp/m2repo test'
+                    docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
+                        sh 'MAVEN_OPTS="-Xmx512m" mvn -Dmaven.repo.local=/tmp/m2repo test'
                     }
                 }
             }
         }
 
-        stage('Static Code Analysis with Java 8') {
+        stage('Static Code Analysis with Java 17') {
             steps {
                 script {
-                    docker.image('maven:3.8.8-openjdk-8').inside('--network host') {
+                    docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
                         sh """
-                        mvn -Dmaven.repo.local=/tmp/m2repo sonar:sonar \
+                        MAVEN_OPTS="-Xmx512m" mvn -Dmaven.repo.local=/tmp/m2repo sonar:sonar \
                           -Dsonar.projectKey=java-app \
                           -Dsonar.host.url=${SONAR_HOST_URL} \
                           -Dsonar.login=${SONAR_TOKEN}
