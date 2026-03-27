@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONAR_HOST_URL = 'http://sonarqube:9000'
+        SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_TOKEN = credentials('sonar-token')
         DOCKER_IMAGE = 'SECRETAGENT_2Z/java-app:latest'
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
@@ -15,21 +15,21 @@ pipeline {
             }
         }
 
-       stage('Build with Java 17') {
-    steps {
-        script {
-            docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
-                sh 'mvn -Dmaven.repo.local=/tmp/m2repo clean package -DskipTests -Dcheckstyle.skip=true -Dspring-javaformat.skip=true -Dnohttp.skip=true'
+        stage('Build with Java 17') {
+            steps {
+                script {
+                    docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
+                        sh 'mvn -Dmaven.repo.local=/tmp/m2repo clean package -DskipTests'
+                    }
+                }
             }
         }
-    }
-       }
 
         stage('Test with Java 11') {
             steps {
                 script {
                     docker.image('maven:3.9.6-eclipse-temurin-11').inside('--network host') {
-                        sh 'mvn test'
+                        sh 'mvn -Dmaven.repo.local=/tmp/m2repo test'
                     }
                 }
             }
@@ -40,7 +40,7 @@ pipeline {
                 script {
                     docker.image('maven:3.8.8-openjdk-8').inside('--network host') {
                         sh """
-                        mvn sonar:sonar \
+                        mvn -Dmaven.repo.local=/tmp/m2repo sonar:sonar \
                           -Dsonar.projectKey=java-app \
                           -Dsonar.host.url=${SONAR_HOST_URL} \
                           -Dsonar.login=${SONAR_TOKEN}
