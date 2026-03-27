@@ -68,7 +68,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "sed -i 's|SECRETAGENT_2Z/java-app:latest|${DOCKER_IMAGE}|g' deployment.yaml"
+                sh "sed -i 's|secretagent_2z/java-app:latest|${DOCKER_IMAGE}|g' deployment.yaml"
                 sh 'kubectl apply -f deployment.yaml'
             }
         }
