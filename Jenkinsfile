@@ -4,7 +4,7 @@ pipeline {
     environment {
         SONAR_HOST_URL = 'http://localhost:9000'
         SONAR_TOKEN = credentials('sonar-token')
-        DOCKER_IMAGE = 'SECRETAGENT_2Z/java-app:latest'
+        DOCKER_IMAGE = 'secretagent_2z/java-app:latest'
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
     }
 
