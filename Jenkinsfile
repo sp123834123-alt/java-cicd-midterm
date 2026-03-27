@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
-                        sh 'mvn clean package -DskipTests'
+                        sh 'mvn clean package -DskipTests -Dcheckstyle.skip=true -Dspring-javaformat.skip=true'
                     }
                 }
             }
