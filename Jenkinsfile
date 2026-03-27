@@ -18,7 +18,7 @@ pipeline {
         stage('Build with Java 17') {
             steps {
                 script {
-                    docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network cicd-network') {
+                    docker.image('maven:3.9.6-eclipse-temurin-17').inside('--network host') {
                         sh 'mvn clean package -DskipTests'
                     }
                 }
