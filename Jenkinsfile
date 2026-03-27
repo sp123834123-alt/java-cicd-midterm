@@ -28,7 +28,7 @@ pipeline {
         stage('Test with Java 11') {
             steps {
                 script {
-                    docker.image('maven:3.9.6-eclipse-temurin-11').inside('--network cicd-network') {
+                    docker.image('maven:3.9.6-eclipse-temurin-11').inside('--network host') {
                         sh 'mvn test'
                     }
                 }
@@ -38,7 +38,7 @@ pipeline {
         stage('Static Code Analysis with Java 8') {
             steps {
                 script {
-                    docker.image('maven:3.8.8-openjdk-8').inside('--network cicd-network') {
+                    docker.image('maven:3.8.8-openjdk-8').inside('--network host') {
                         sh """
                         mvn sonar:sonar \
                           -Dsonar.projectKey=java-app \
